@@ -14,10 +14,12 @@
 #include <zephyr/sys/byteorder.h>
 
 // Define Manufacturer Specific Data structure
-typedef struct adv_mfg_data {
+struct adv_mfg_data {
 	uint16_t company_id;
 	int16_t temperature;
-} adv_mfg_data_t;
+	uint8_t group_id;
+} __packed;
+typedef struct adv_mfg_data adv_mfg_data_t;
 
 // This is our device name from prj.conf
 #define DEVICE_NAME CONFIG_BT_DEVICE_NAME
@@ -30,6 +32,7 @@ typedef struct adv_mfg_data {
 static adv_mfg_data_t adv_mfg_data = {
 	.company_id = COMPANY_ID,
 	.temperature = 0,
+	.group_id = 99, // Default silly group ID 
 };
 
 /**
@@ -98,7 +101,11 @@ int main(void)
 
 		int16_t temp_int16 = (int16_t)(temperature * 100);
 
+		// Update the temperature in the advertisement data
 		adv_mfg_data.temperature = sys_cpu_to_le16(temp_int16);
+
+		// Update your group ID here
+		adv_mfg_data.group_id = 1; // Example group ID
 
 		err = bt_le_adv_update_data(ad, ARRAY_SIZE(ad), NULL, 0);
 		if (err) {
