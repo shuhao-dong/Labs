@@ -7,7 +7,7 @@ import requests
 from bleak import BleakScanner
 
 # CONFIGURATION
-TARGET_NAME = "Lab4-Adv"
+TARGET_NAME = {"Lab4-Adv", "LabGroup1"}
 COMPANY_ID = 0x0059 
 
 # ThingsBoard Config
@@ -47,7 +47,7 @@ def push_to_cloud(temperature, grp_id, grp_rssi):
 def detection_callback(device, advertisement_data):
     global last_sent_time
     
-    if device.name and device.name == TARGET_NAME:
+    if device.name and device.name in TARGET_NAME:
         if COMPANY_ID in advertisement_data.manufacturer_data:
             
             # This allows you to debug and observe the raw data from your BLE packet
