@@ -13,6 +13,13 @@
 #include <zephyr/bluetooth/bluetooth.h>
 #include <zephyr/sys/byteorder.h>
 
+// This is our device name from prj.conf
+#define DEVICE_NAME CONFIG_BT_DEVICE_NAME
+#define DEVICE_NAME_LEN (sizeof(DEVICE_NAME) - 1)
+
+// This is the company ID that will be in the Manufacturer Specific Data
+#define COMPANY_ID 0x0059 // Nordic Semiconductor ASA
+
 // Define Manufacturer Specific Data structure
 struct adv_mfg_data {
 	uint16_t company_id;
@@ -20,13 +27,6 @@ struct adv_mfg_data {
 	uint8_t group_id;
 } __packed;
 typedef struct adv_mfg_data adv_mfg_data_t;
-
-// This is our device name from prj.conf
-#define DEVICE_NAME CONFIG_BT_DEVICE_NAME
-#define DEVICE_NAME_LEN (sizeof(DEVICE_NAME) - 1)
-
-// This is the company ID that will be in the Manufacturer Specific Data
-#define COMPANY_ID 0x0059 // Nordic Semiconductor ASA
 
 // Initialise data to be advertised
 static adv_mfg_data_t adv_mfg_data = {
